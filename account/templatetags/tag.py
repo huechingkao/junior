@@ -51,3 +51,13 @@ def img(title):
         return "teacher"
     else :
         return ""
+		
+@register.filter
+def student_username(name):
+    start = "_"
+    student = name[name.find(start)+1:]
+    return student
+	
+@register.filter
+def teacher_group(user):
+    return user.groups.filter(name='teacher').exists()

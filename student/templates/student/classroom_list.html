@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load tag %}
 {% block content %}
-<a href="/student/classroom/join">加入班級</a>
-<table>
+<a href="/student/classroom/join" class="btn btn-info">加入班級</a>
+<table class="table">
   <tr>
   <th>班級名稱</th>   
   <th>功能</th>       
@@ -11,8 +11,25 @@
   <tr>
   <td>{{classroom.name}}</td>
   <td>
-    <a href="/student/classroom/{{enroll.id}}/seat">座號</a>
-    <a href="/student/classroom/{{classroom.id}}/classmate">同學</a>
+      <p style="padding:0px; margin:2px;">
+基本資料：
+			<a href="/student/classroom/{{enroll.id}}/seat" role="button" class="btn btn-outline-success">座號</a>
+			<a href="/student/group/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">組別</a>
+			<a href="/student/classroom/{{classroom.id}}/classmate" role="button" class="btn btn-outline-success">同學</a>
+			<a href="/student/work1/{{enroll.classroom.lesson}}/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">小老師</a>
+      <a href="/student/memo_count/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">詞頻</a>
+      <a href="/student/memo_count/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">公告</a>	  
+      <a href="/student/memo_count/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">討論區</a>          
+    </p>
+    <p style="padding:0px; margin:2px;">
+  課程活動：
+	        <a href="/student/work/0/{{enroll.classroom.lesson}}/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">指定作業</a>
+			<a href="/student/progress/0/{{enroll.classroom.lesson}}/1/{{enroll.classroom.id}}/" role="button" class="btn btn-outline-success">進度</a>
+	        <a href="/student/work/1/{{enroll.classroom.lesson}}/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">自訂作業</a>
+     	<a href="/student/progress/1/{{enroll.classroom.lesson}}/1/{{enroll.classroom.id}}/" role="button" class="btn btn-outline-success">進度</a>
+	        <a href="/student/work/2/{{enroll.classroom.lesson}}/{{enroll.classroom_id}}" role="button" class="btn btn-outline-success">檢核作業</a>  
+     	<a href="/student/progress/2/{{enroll.classroom.lesson}}/1/{{enroll.classroom.id}}/" role="button" class="btn btn-outline-success">進度</a>
+    </p>
   </td>
   </tr>
 {% endfor %}

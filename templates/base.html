@@ -39,6 +39,7 @@
         <a class="dropdown-item" href="/student/lessons/1">進階程式設計：使用Scratch 2.X</a>		
       </div>
 	  </li>
+    {% if user.is_authenticated %}		  
     <li class="nav-item">
       <a class="nav-link" href="/account/dashboard/0">訊息</a>
     </li>
@@ -58,17 +59,18 @@
       <a class="nav-link" href="/account/user">帳號</a>
     {% endif %}	  
     </li>
+	{% endif %}
 	</ul>
     </div>
     <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar">
         <ul class="navbar-nav ml-auto">
     {% if user.is_authenticated %}	
     <li><a href="/account/avatar"><img src="/static/avatar/s{{request.user.profile.avatar}}.png"></a>{{ request.user.first_name }}　</li>
-    <li class="nav-item"><a class="nav-link btn btn-info" href="/account/logout">登出</a></li>
+    <li class="nav-item"><a class="nav-link btn btn-outline-info" href="/account/logout">登出</a></li>
     {% else %}
-    <li class="nav-item"><a class="nav-link btn btn-info" href="/account/user/create" >申請教師帳號</a></li>  	
-    <li class="nav-item"><a class="nav-link btn btn-info" href="/account/login/0" >教師登入</a></li>  
-    <li class="nav-item"><a class="nav-link btn btn-info" href="/account/login/1">學生登入</a></li>
+    <li class="nav-item"><a class="nav-link btn btn-outline-info" href="/account/user/create" >申請教師帳號</a></li>  	
+    <li class="nav-item"><a class="nav-link btn btn-outline-info" href="/account/login/0" >教師登入</a></li>  
+    <li class="nav-item"><a class="nav-link btn btn-outline-info" href="/account/login/1">學生登入</a></li>
     {% endif %} 
         </ul>
     </div>

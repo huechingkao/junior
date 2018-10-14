@@ -22,6 +22,19 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.utils.timezone import localtime
 
+# 判斷是否為本班同學
+def is_classmate(user_id, classroom_id):
+    return Enroll.objects.filter(student_id=user_id, classroom_id=classroom_id).exists()
+
+# 判斷可否觀看訊息
+def line_can_read(message_id, user_id):
+    if MessagePoll.objects.filter(message_id=message_id, reader_id=user_id).exists():
+        return True
+    elif Message.objects.filter(id=message_id, author_id=user_id).exists():
+        return True
+    else:
+        return False
+
 class Login(FormView):
     success_url = '/account/dashboard/0'
     form_class = LoginForm
@@ -53,8 +66,8 @@ class Login(FormView):
             user.save()
             
             # create Message
-            title = "請修改您的姓名"
-            url = "/account/realname"
+            title = "請修改您的暱稱"
+            url = "/account/nickname"
             message = Message(title=title, url=url, time=timezone.now())
             message.save()                        
                     
@@ -116,7 +129,7 @@ class SuperUserRequiredMixin(object):
 class UserList(SuperUserRequiredMixin, generic.ListView):
     model = User
     ordering = ['-id']
-    paginate_by = 3 
+    paginate_by = 25
 
 class UserDetail(LoginRequiredMixin, generic.DetailView):
     model = User
@@ -215,30 +228,7 @@ def make(request):
             #messagepoll.save()               
         return JsonResponse({'status':'ok'}, safe=False)
     else:
-        return JsonResponse({'status':user_id}, safe=False)        
-		
-# 判斷是否為本班同學
-def is_classmate(user_id, classroom_id):
-    return Enroll.objects.filter(student_id=user_id, classroom_id=classroom_id).exists()
-
-# 判斷可否觀看訊息
-def line_can_read(message_id, user_id):
-    if MessagePoll.objects.filter(message_id=message_id, reader_id=user_id).exists():
-        return True
-    elif Message.objects.filter(id=message_id, author_id=user_id).exists():
-        return True
-    else:
-        return False
-
-# 訊息(儀表板)
-class LineList(LoginRequiredMixin, generic.ListView):
-    model = MessagePoll
-    paginate_by = 3
-    template_name = 'account/dashboard.html'
-        
-    def get_queryset(self, **kwargs):
-        messagepolls = MessagePoll.objects.filter(reader_id=self.request.user.id).order_by('-id')
-        return messagepolls           
+        return JsonResponse({'status':user_id}, safe=False)               
       
 # 列出同學以私訊
 class LineClassmateList(LoginRequiredMixin, generic.ListView):
@@ -289,7 +279,7 @@ class LineCreate(LoginRequiredMixin, CreateView):
         return context	       
 
 # 訊息內容
-class LineDetail(generic.DetailView):
+class LineDetail(LoginRequiredMixin,generic.DetailView):
     model = Message
     template_name = "account/line_detail.html"
     
@@ -319,7 +309,7 @@ class UserDetail(LoginRequiredMixin, generic.DetailView):
         return context
 		
 # 訊息
-class MessageList(ListView):
+class MessageList(LoginRequiredMixin,ListView):
     context_object_name = 'messages'
     paginate_by = 20
     template_name = 'dashboard.html'
@@ -349,3 +339,52 @@ class MessageList(ListView):
 def avatar(request):
     profile = Profile.objects.get(user = request.user)      
     return render(request, 'avatar.html', {'avatar':profile.avatar})
+	
+# 修改他人的真實姓名
+def adminnickname(request, user_id):
+    if request.method == 'POST':
+        form = NicknameForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(id=user_id)
+            user.first_name =form.cleaned_data['first_name']
+            user.save()
+                
+            return redirect('/')
+    else:
+        teacher = False
+        enrolls = Enroll.objects.filter(student_id=user_id)
+        for enroll in enrolls:
+            classroom = Classroom.objects.get(id=enroll.classroom_id)
+            if request.user.id == classroom.teacher_id:
+                teacher = True
+                break
+        if teacher:
+            user = User.objects.get(id=user_id)
+            form = NicknameForm(instance=user)
+        else:
+            return redirect("/")
+
+    return render(request, 'form.html',{'form': form})
+    
+# 修改自己的真實姓名
+def nickname(request):
+    if request.method == 'POST':
+        form = NicknameForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(id=request.user.id)
+            user.first_name =form.cleaned_data['first_name']
+            user.save()
+                
+            return redirect('/account/user/'+str(request.user.id))
+    else:
+        user = User.objects.get(id=request.user.id)
+        form = NicknameForm(instance=user)
+
+    return render(request, 'form.html',{'form': form})
+	
+def message(request, messagepoll_id):
+    messagepoll = MessagePoll.objects.get(id=messagepoll_id)
+    messagepoll.read = True
+    messagepoll.save()
+    message = Message.objects.get(id=messagepoll.message_id)
+    return redirect(message.url)

@@ -12,9 +12,9 @@
   <td>{{user.username}}</td>       
   <td><a href="/account/user/{{user.id}}">{{user.first_name}}</a></td>       
   <td>
-  {% if user|has_group:"teacher" %}<a href="#" data-userid="{{ user.id }}" data-action="unset" class="teacher btn btn-success" role="button">取消教師</a>{% else %}<a href="#" data-userid="{{ user.id }}" data-action="set" class="teacher btn btn-secondary" role="button">設為教師</a>{% endif %}
-  <a href="/account/user/{{user.id}}/update/" class="btn btn-success" role="button">修改</a>
-  <a href="/account/user/{{user.id}}/password/" class="btn btn-success" role="button"">密碼</a>
+  {% if user|has_group:"teacher" %}<a href="#" data-userid="{{ user.id }}" data-action="unset" class="teacher btn btn-success" role="button">取消教師</a>{% else %}<a href="#" data-userid="{{ user.id }}" data-action="set" class="teacher btn btn-outline-success" role="button">設為教師</a>{% endif %}
+  <a href="/account/user/{{user.id}}/update/" class="btn btn-outline-success" role="button">修改</a>
+  <a href="/account/user/{{user.id}}/password/" class="btn btn-outline-success" role="button"">密碼</a>
   </td>
   </tr>
 {% endfor %}
@@ -37,11 +37,11 @@
         {
           var previous_action = $(launcher).data('action');
 		      if (previous_action == 'set') {
-               $(launcher).removeClass("btn-secondary").addClass("btn-success");
+               $(launcher).removeClass("btn-outline-success").addClass("btn-success");
                $(launcher).html("取消教師");
                $(launcher).data('action', 'unset');
            } else {
-               $(launcher).removeClass("btn-success").addClass("btn-secondary");
+               $(launcher).removeClass("btn-success").addClass("btn-outline-success");
                $(launcher).html("設為教師");
                $(launcher).data('action', 'set');               
            }

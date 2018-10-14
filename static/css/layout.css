@@ -1,10 +1,15 @@
 @charset "utf-8";
+
+body {
+  font-size: 16px;
+}
+
 .navbar {
   padding: 0px;
 }
 .wrap {display:block;margin:0;padding:0;text-align:left;word-wrap:break-word; width:100%;}
 
-#topbar{padding:10px 0; font-size:14px; text-transform:uppercase;color: inherit;}
+#topbar{padding:10px 0; color: inherit;}
 #topbar .drop::after, #topbar li li .drop::after, #breadcrumb li a::after, .sidebar nav a::after{position:absolute; font-family:"FontAwesome"; font-size:10px; line-height:10px;}
 #topbar ul li{display:inline-block; margin-right:5px;}
 #topbar ul li:last-child{margin-right:0; padding-right:0;}
@@ -22,13 +27,12 @@
 #dropdown {
     text-transform: none !important;
     padding: 5px;
-    font-size: 14px;
     color: #FFFFFF;
     background-color: rgb(10,110,175);
     border-color: rgba(255,255,255,.2);
 }
 
-#footer{padding:20px 0; border-top:1px solid;font-size:14px;}
+#footer{padding:20px 0; border-top:1px solid;}
 #footer *{margin:0; padding:0;}
 #footer{border-color:rgba(0,0,0,.1);}
 

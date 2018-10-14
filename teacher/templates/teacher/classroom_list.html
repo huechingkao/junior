@@ -2,7 +2,7 @@
 {% load tag %}
 {% block content %}
 <a href="/teacher/classroom/create" class="btn btn-info">新增班級</a>
-<a href="/teacher/classroom/create" class="btn btn-info">學生帳號</a>
+<a href="/teacher/student/list" class="btn btn-info">學生帳號</a>
 <table class="table">
   <tr>
   <th>班級名稱</th>   
@@ -11,12 +11,27 @@
   </tr>
 {% for classroom in classroom_list %}
   <tr>
-  <td>{{classroom.name}}</td>
+  <td>{{classroom.name}}<BR>({{classroom.lesson_choice}})</td>
   <td>{{classroom.password}}</td>
   <td>
-    <a class="btn btn-success" href="/teacher/classroom/{{classroom.id}}/update">修改</a>
-    <a class="btn btn-success" href="/student/classroom/{{classroom.id}}/classmate">學生</a>
-    <a class="btn btn-success" href="/teacher/announce/{{classroom.id}}/create">公告</a>    	
+              <p style="padding:0px; margin:2px;">
+                <a href="/teacher/classroom/{{classroom.id}}/update" role="button" class="btn btn-outline-success">修改</a>
+                <a href="/student/classroom/{{classroom.id}}/classmate" role="button" class="btn btn-outline-success">學生</a>
+                <a href="/teacher/classroom/assistant/{{classroom.id}}" role="button" class="btn btn-outline-success">助教</a>                
+                <a href="/student/group/{{classroom.id}}" role="button" class="btn btn-outline-success">組別</a>
+				<a href="/teacher/work/{{classroom.lesson}}/{{classroom.id}}" role="button" class="btn btn-outline-success">指定作業</a>
+				<a href="/teacher/work2/{{classroom.lesson}}/{{classroom.id}}" role="button" class="btn btn-outline-success">自訂作業</a>                
+				<a href="/teacher/work3/{{classroom.lesson}}/{{classroom.id}}" role="button" class="btn btn-outline-success">檢核作業</a>                
+               </p>
+              <p style="padding:0px; margin:2px;">
+                <a href="/teacher/announce/{{classroom.id}}/create" role="button" class="btn btn-outline-success">公告</a>   
+                <a href="/teacher/forum/{{classroom.id}}" role="button" class="btn btn-outline-success">討論區</a>                          
+                <a href="/survey/select/{{classroom.lesson}}/{{classroom.id}}" role="button" class="btn btn-outline-success">課前問卷</a>
+                <a href="/survey/select/{{classroom.lesson}}/{{classroom.id}}" role="button" class="btn btn-outline-success">課後問卷</a>				<a href="/teacher/assistant/group/0/{{classroom.id}}/" role="button" class="btn btn-outline-success">小老師</a>
+				<a href="/teacher/memo/{{classroom.lesson}}/{{classroom.id}}" role="button" class="btn btn-outline-success">心得</a>						  			
+				<a href="/teacher/grade/0/{{classroom.lesson}}/1/{{classroom.id}}" role="button" class="btn btn-outline-success">成績</a>       
+              
+              </p>       	
   </td>
   </tr>
 {% endfor %}

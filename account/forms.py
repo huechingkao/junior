@@ -1,6 +1,7 @@
 ﻿from django import forms
 from django.contrib.auth.models import User, Group
 from account.models import *
+from captcha.fields import CaptchaField
 
 
 # 使用者登入表單
@@ -36,7 +37,8 @@ class UserRegistrationForm(forms.ModelForm):
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat password', 
                                 widget=forms.PasswordInput)
-
+    captcha = CaptchaField(error_messages={'invalid': '驗證碼錯誤'})
+	
     class Meta:
         model = User
         fields = ('username', 'first_name')
@@ -65,7 +67,8 @@ class UserRegistrationForm(forms.ModelForm):
         self.fields['username'].label = "帳號"
         self.fields['first_name'].label = "暱稱"
         self.fields['password'].label = "密碼"
-        self.fields['password2'].label = "再次確認密碼"    
+        self.fields['password2'].label = "再次確認密碼" 
+        self.fields['captcha'].label = "驗證碼"
 
 class UserUpdateForm(forms.ModelForm): 
     class Meta:
@@ -111,3 +114,19 @@ class LineForm(forms.ModelForm):
         self.fields['content'].required = False            
         self.fields['content'].widget.attrs['cols'] = 50
         self.fields['content'].widget.attrs['rows'] = 20          
+
+# 修改密碼表單
+class PasswordForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['password']
+
+# 修改暱稱表單
+class NicknameForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name']
+
+    def __init__(self, *args, **kwargs):
+        super(NicknameForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].label = "暱稱"
