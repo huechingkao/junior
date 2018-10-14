@@ -1,5 +1,24 @@
 ﻿from django import forms
 from django.contrib.auth.models import User, Group
+from account.models import *
+
+
+# 使用者登入表單
+class LoginForm(forms.Form):
+    username = forms.CharField(label='帳號')
+    password = forms.CharField(label='密碼', widget=forms.PasswordInput)
+
+# 學生登入表單
+class LoginStudentForm(forms.Form):
+    teacher = forms.CharField()
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        super(LoginStudentForm, self).__init__(*args, **kwargs)
+        self.fields['teacher'].label = "教師帳號"
+        self.fields['username'].label = "學生帳號"
+        self.fields['password'].label = "學生密碼"    
 
 class UserRegistrationForm(forms.ModelForm): 
     error_messages = {
@@ -20,7 +39,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name')
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -44,23 +63,19 @@ class UserRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['username'].label = "帳號"
-        self.fields['first_name'].label = "真實姓名"
-        self.fields['last_name'].label = "學校名稱"
-        self.fields['email'].label = "電子郵件"
+        self.fields['first_name'].label = "暱稱"
         self.fields['password'].label = "密碼"
         self.fields['password2'].label = "再次確認密碼"    
 
 class UserUpdateForm(forms.ModelForm): 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name')
 
     def __init__(self, *args, **kwargs):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
         self.fields['username'].label = "帳號"
-        self.fields['first_name'].label = "真實姓名"
-        self.fields['last_name'].label = "學校名稱"
-        self.fields['email'].label = "電子郵件"         
+        self.fields['first_name'].label = "暱稱"         
 
 class UserPasswordForm(forms.ModelForm): 
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -82,3 +97,17 @@ class UserTeacherForm(forms.Form):
         self.fields['teacher'].label = "教師"  
         self.fields['teacher'].initial = User.objects.get(id=user_id).groups.filter(name='teacher').exists()
         
+# 新增一個私訊表單
+class LineForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['title','content',]
+       
+    def __init__(self, *args, **kwargs):
+        super(LineForm, self).__init__(*args, **kwargs)
+        self.fields['title'].label = "主旨"
+        self.fields['title'].widget.attrs['size'] = 50
+        self.fields['content'].label = "內容"
+        self.fields['content'].required = False            
+        self.fields['content'].widget.attrs['cols'] = 50
+        self.fields['content'].widget.attrs['rows'] = 20          

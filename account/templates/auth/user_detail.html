@@ -3,6 +3,6 @@
 {% block content %}
 <BR>
 帳號：{{user.username}}<BR>
-姓名：{{user.first_name}}<BR>
-學校：{{user.last_name}}<BR>
+暱稱：{{user.first_name}}<BR>
+積分：<A href="/account/point/{{user.id}}">{{profile.point}}</A><BR>
 {% endblock %}
