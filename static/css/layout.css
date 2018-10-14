@@ -39,7 +39,7 @@
 
 /* Rows */
 .toprow{color:#FFFFFF; background-color:#0069A8;position:fixed; z-index: 999; top:0%;}
-.container{color:#474747; background-color:#FFFFFF; margin:20px;}
+.container{color:#474747; background-color:#FFFFFF; margin:20px auto;}
 .footer, .footer a{color:#BCBCBC; background-color:#222222;}
 .clear, .group{display:block;}
 .clear::before, .clear::after, .group::before, .group::after{display:table; content:"";}

@@ -345,3 +345,7 @@ class MessageList(ListView):
         context = super(MessageList, self).get_context_data(**kwargs)
         context['action'] = self.kwargs['action']
         return context
+		
+def avatar(request):
+    profile = Profile.objects.get(user = request.user)      
+    return render(request, 'avatar.html', {'avatar':profile.avatar})

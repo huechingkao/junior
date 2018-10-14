@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load tag %}
 {% block content %}
-<a href="/teacher/classroom/create">新增班級</a>
-<table>
+<a href="/teacher/classroom/create" class="btn btn-info">新增班級</a>
+<a href="/teacher/classroom/create" class="btn btn-info">學生帳號</a>
+<table class="table">
   <tr>
   <th>班級名稱</th>   
   <th>選課密碼</th>
@@ -13,9 +14,9 @@
   <td>{{classroom.name}}</td>
   <td>{{classroom.password}}</td>
   <td>
-    <a href="/teacher/classroom/{{classroom.id}}/update">修改</a>
-    <a href="/student/classroom/{{classroom.id}}/classmate">學生</a>
-    <a href="/teacher/announce/{{classroom.id}}/create">公告</a>    	
+    <a class="btn btn-success" href="/teacher/classroom/{{classroom.id}}/update">修改</a>
+    <a class="btn btn-success" href="/student/classroom/{{classroom.id}}/classmate">學生</a>
+    <a class="btn btn-success" href="/teacher/announce/{{classroom.id}}/create">公告</a>    	
   </td>
   </tr>
 {% endfor %}
